@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DorisSchema测试</title>
+</head>
+<body>
+
+<div id="app">
+</div>
+
+<template id="my-app">
+    <ul>
+        <template v-for="(dbschema, index) in dbschema_list">
+            <template v-for="(value, key, schema_index) in dbschema">
+                <li>{{schema_index}}</li>
+                <li>{{key}}</li>
+                <li>{{value}}</li>
+            </template>
+        </template>
+    </ul>
+</template>
+
+</body>
+<script src="./js/vue.js"></script>
+<script>
+
+    const app = Vue.createApp(
+        {
+            template: '#my-app',
+            data() {
+                return {
+                    dbschema_list: [
+                        {
+                            dbname: "tx_dev",
+                            table: "dws_orderinfo_minute",
+                            fieldname: "total_source_price",
+                            type: "double",
+                            comment: "总成本"
+                        },
+                        {
+                            dbname: "tx_dev",
+                            table: "dws_orderinfo_minute",
+                            fieldname: "order_minute",
+                            type: "string",
+                            comment: "下单时间"
+                        },
+                        {
+                            dbname: "tx_dev",
+                            table: "dws_orderinfo_minute",
+                            fieldname: "total_final_price",
+                            type: "double",
+                            comment: "销售总额"
+                        }
+                    ]
+                }
+            }
+        }
+    );
+
+    app.mount("#app");
+
+</script>
+</html>

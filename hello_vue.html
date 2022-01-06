@@ -13,6 +13,11 @@
             <h2>{{counter}}</h2>
             <button @click="increment">+1</button>
             <button @click="decrement">-1</button>
+            <input type="text" v-model.number="score">
+            <h2 v-if = "score > 90"> 优秀 </h2>
+            <h2 v-else-if="score > 80"> 优秀 </h2>
+            <h2 v-else-if = "score > 70"> 优秀 </h2>
+            <h2 v-else> 不及格 </h2>
         </div>
     </template>
 </body>
@@ -22,7 +27,8 @@
         template: '#my-app',
         data() {
             return {
-                counter: 0
+                counter: 0,
+                score: 100
             }
         },
         methods: {
