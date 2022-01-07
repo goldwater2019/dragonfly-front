@@ -1,17 +1,20 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+<!--    <img alt="Vue logo" src="./assets/logo.png">-->
+    <kafka-config/>
+<!--    <state-test/>-->
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import KafkaConfig from "@/components/KafkaConfig";
+// import StateTest from "@/components/StateTest";
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    KafkaConfig
+    // StateTest
   }
 }
 </script>
