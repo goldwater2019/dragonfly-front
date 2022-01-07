@@ -135,7 +135,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         kafkaConfigList: [],
-        num: 0
+        num: 0,
+        pageKey: 1, // 1: kafkaConfig页面; 2: topic管理页面; 3: starRocks管理页面; 4: schema管理
     },
     mutations: {
         addNum(state, payload) {
@@ -158,6 +159,9 @@ export default new Vuex.Store({
                 createTime: "d",
                 updateTime: "d"
             });
+        },
+        changePageKey(state, payload) {
+            state.pageKey = payload.pageKey;
         }
     },
     actions: {
