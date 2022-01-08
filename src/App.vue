@@ -3,7 +3,7 @@
     <div class="flex w-100 left">
       <nav-bar class="w-20"/>
       <div>
-        <router-view class="h-100 right flex-align-start nmt-50 ml-10" />
+        <router-view class="h-100 right flex-align-start nmt-50 ml-10" style="width: 1024px"/>
       </div>
     </div>
   </div>

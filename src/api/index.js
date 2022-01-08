@@ -34,6 +34,9 @@ const api = {
     },
     getTableNamesSchema(params) {
         return request.post('/dorisConfig/schema/tbname/get', params);
+    },
+    getAndRefreshDorisSchemaList(params) {
+        return request.post('/dorisConfig/schema/get/refresh/list', params);
     }
 }
 

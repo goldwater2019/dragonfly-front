@@ -6,7 +6,7 @@ const baseURL = 'http://localhost:8081'
 
 const request = axios.create({
     baseURL: baseURL,
-    timeout: 10000,
+    timeout: 60000,
     withCredentials: true,
 })
 
