@@ -28,6 +28,12 @@ const api = {
     // 删除topic
     deleteTopic(params) {
         return request.post("/kafkaConfig/topic/delete/", params);
+    },
+    getAllDorisConfig() {
+        return request.get("/dorisConfig/doris/config/get");
+    },
+    getTableNamesSchema(params) {
+        return request.post('/dorisConfig/schema/tbname/get', params);
     }
 }
 

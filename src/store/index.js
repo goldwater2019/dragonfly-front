@@ -1,136 +1,10 @@
-// import {createStore, mapGetters} from "vuex";
-// import {useStore, mapState} from "vuex";
-// import {computed} from "vue";
-//
-// const store = createStore({
-//     state() {
-//         return {
-//             kafkaConfigList: [],
-//             rootCounter: 100,
-//             name: "lambda1024",
-//             age: 18,
-//             height: 188,
-//             books: [
-//                 {name: "vueJS", count: 2, price: 110},
-//                 {name: "react", count: 3, price: 120},
-//                 {name: "webpack", count: 4, price: 133}
-//             ]
-//         }
-//     },
-//     getters: {
-//         doubleRootCounter(state) {
-//             return state.rootCounter * 2;
-//         },
-//         totalPrice(state) {
-//             let totalPrice = 0;
-//             for (const book of state.books) {
-//                 totalPrice += book.count * book.price;
-//             }
-//             return totalPrice;
-//         },
-//         totalPriceWithMyName(state, getters) {
-//             return getters.totalPrice + ", " + getters.myName;
-//         },
-//         myName(state) {
-//             return state.name;
-//         }
-//     },
-//     mutations: {
-//         addKafkaConfigList(state, payload) {
-//             state.kafkaConfigList.push({
-//                 kafkaId: payload.kafkaId,
-//                 brokerList: payload.brokerList,
-//                 kafkaAlias: payload.kafkaAlias,
-//                 createTime: payload.createTime,
-//                 updateTime: payload.updateTime
-//             })
-//         },
-//         removeKafkaConfigById(state, payload) {
-//             let newKafkaConfigList = []
-//             let removedKafkaConfig = null;
-//             for (let kafkaConfig in state.kafkaConfigList) {
-//                 if (kafkaConfig.kafkaId === payload.kafkaId) {
-//                     removedKafkaConfig = kafkaConfig;
-//                     continue;
-//                 }
-//                 newKafkaConfigList.push(kafkaConfig);
-//             }
-//             state.kafkaConfigList = newKafkaConfigList;
-//             return removedKafkaConfig;
-//         },
-//         increment(state) {
-//             state.rootCounter++;
-//         },
-//         decrement(state) {
-//             state.rootCounter--;
-//         },
-//         incrementN(state, payload) {
-//             console.log(payload);
-//             state.rootCounter = state.rootCounter + payload.n;
-//         },
-//         decrementN(state, payload) {
-//             state.rootCounter = state.rootCounter - payload.n;
-//         }
-//     },
-//     actions: {
-//         testIncrementAction(context, payload) {
-//             context.commit("incrementN", payload);
-//         },
-//         increment(context) {
-//             return new Promise((resolve) => {
-//                 setTimeout(() => {
-//                     context.commit("increment");
-//                     resolve("异步完成");
-//                 }, 1000);
-//             });
-//         }
-//     },
-//     modules: {
-//         // home,
-//         // user
-//     }
-// })
-//
-// export default store;
-//
-// export function useState(mapper) {
-//     const store = useStore();
-//     const stateFns = mapState(mapper);
-//
-//     const state = {}
-//     Object.keys(stateFns).forEach(fnKey => {
-//         state[fnKey] = computed(
-//             stateFns[fnKey].bind({$store: store})
-//         )
-//     });
-//
-//     return {
-//         ...state
-//     }
-// }
-//
-// export function useGetters(mapper) {
-//     const store = useStore();
-//     const getterFns = mapGetters(mapper);
-//
-//     const state = {}
-//     Object.keys(getterFns).forEach(fnKey => {
-//         state[fnKey] = computed(
-//             getterFns[fnKey].bind({$store: store})
-//         )
-//     });
-//
-//     return {
-//         ...state
-//     }
-// }
-
 import Vue from "vue";
 import Vuex from 'vuex';
-
 import api from "@/api";
 
+
 Vue.use(Vuex);
+
 
 export default new Vuex.Store({
     state: {
@@ -140,6 +14,9 @@ export default new Vuex.Store({
         kafkaSelectedConfig: [],
         num: 0,
         pageKey: 1, // 1: kafkaConfig页面; 2: topic管理页面; 3: starRocks管理页面; 4: schema管理
+        dorisConfigList: [],
+        dorisTableConfigSelectedList: [],
+        dorisIdList: []
     },
     mutations: {
         addNum(state, payload) {
@@ -197,9 +74,63 @@ export default new Vuex.Store({
                     kafkaAlias: payload.kafkaAlias
                 }
             );
+        },
+        clearDorisConfigList(state) {
+            state.dorisConfigList = [];
+        },
+        addDorisConfig(state, payload) {
+            state.dorisConfigList.push({
+                dorisId: payload.dorisId,
+                dorisAlias: payload.dorisAlias,
+                dbname: payload.dbname,
+                username: payload.username,
+                password: payload.password,
+                loadUrl: payload.loadUrl,
+                jdbcUrl: payload.jdbcUrl
+            });
+        },
+        clearDorisTableConfigSelectedList(state) {
+            state.dorisTableConfigSelectedList = [];
+        },
+        addDorisTableConfigSelectedList(state, payload) {
+            state.dorisTableConfigSelectedList.push({
+                // tableHash: payload.dbName + payload.tableName + payload.dorisId,
+                tableId: String(payload.dorisId) + "@" + payload.tableName,
+                dorisId: payload.dorisId,
+                tableName: payload.tableName,
+                dbName: payload.dbName
+            });
+        },
+        clearDorisIdList(state) {
+            state.dorisIdList = [];
+        },
+        addDorisIdIntoList(state, payload) {
+            state.dorisIdList.push({
+                dorisId: payload.dorisId
+            });
         }
     },
     actions: {
+        async fetAllDorisConfigData(context) {
+            await api.getAllDorisConfig().then(
+                (res) => {
+                    context.commit('clearDorisConfigList');
+                    let data = res.data;
+                    for (let payload of data) {
+                        context.commit({
+                            type: 'addDorisConfig',
+                            dorisId: payload.dorisId,
+                            dorisAlias: payload.dorisAlias,
+                            dbname: payload.dbname,
+                            username: payload.username,
+                            password: payload.password,
+                            loadUrl: payload.loadUrl,
+                            jdbcUrl: payload.jdbcUrl
+                        })
+                    }
+                }
+            );
+        },
         async fetchAllKafkaConfigData({commit}) {
             const configPromise = await api.getAllKafkaConfig();
             const aliasPromise = await api.getAllKafkaConfigAlias();
@@ -234,6 +165,33 @@ export default new Vuex.Store({
                     topicId: topicInfo.topicId
                 })
             }
+        },
+        async fetchTableNamesSchema(context) {
+            let param = context.state.dorisIdList;
+            await api.getTableNamesSchema(param).then(
+                (res) => {
+                    context.commit("clearDorisTableConfigSelectedList");
+                    let dorisTableConfigList = [];
+                    let data = res.data;
+                    for (let dorisSchema of data) {
+                        dorisTableConfigList.push({
+                            dorisId: dorisSchema.dorisId,
+                            tableName: dorisSchema.tableName,
+                            dbName: dorisSchema.dbName
+                        });
+                    }
+                    for (let payload of dorisTableConfigList) {
+                        context.commit({
+                            type: "addDorisTableConfigSelectedList",
+                            dorisId: payload.dorisId,
+                            tableName: payload.tableName,
+                            dbName: payload.dbName
+                        })
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
         }
     },
     getters: {}

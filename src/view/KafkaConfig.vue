@@ -8,7 +8,7 @@
       <el-table-column align="center" prop="kafkaAlias" label="kafka别名" width="150px"></el-table-column>
       <el-table-column align="center" prop="createTime" label="	创建时间" width="150px"></el-table-column>
       <el-table-column align="center" prop="updateTime" label="	修改时间" width="150px"></el-table-column>
-      <el-table-column label="操作" width="200px" fixed="right">
+      <el-table-column label="操作" width="200px" fixed="right" align="center">
         <template slot-scope="{row}">
           <lambda-button size="mini" icon="el-icon-edit" type="warning" @click="onEditKafkaConfig(row)">修改
           </lambda-button>
@@ -37,44 +37,6 @@ import LambdaButton from "@/components/common/LambdaButton";
 
 // import {useState} from "@/store";
 import {mapState} from "vuex";
-
-let kafkaConfigColumns = [
-  {
-    title: "kafka配置ID",
-    dataIndex: "kafkaId",
-    sorter: true,
-    width: "15%"
-  },
-  {
-    title: "kafka服务器列表",
-    dataIndex: "brokerList",
-    width: "15%"
-  },
-  {
-    title: "kafka别名",
-    dataIndex: "kafkaAlias",
-    width: "15%"
-  },
-  {
-    title: "创建时间",
-    dataIndex: "createTime",
-    sorter: true,
-    width: "15%",
-    scopedSlots: {customRender: 'createTime'}
-  },
-  {
-    title: "修改时间",
-    dataIndex: "updateTime",
-    sorter: true,
-    width: "15%"
-  },
-  {
-    title: "操作",
-    key: "action",
-    width: "15%",
-    scopedSlots: {customRender: 'action'},
-  }
-];
 
 export default {
   name: "KafkaConfig",
@@ -119,12 +81,10 @@ export default {
           value: alias
         });
       }
-      this.kafkaConfigColumns[2].filter = filterList;
     }
   },
   data() {
     return {
-      kafkaConfigColumns,
       kafkaConfigLoading: false,
       kafkaConfigPagination: {},
       kafkaConfigData: []
