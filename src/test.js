@@ -5,6 +5,11 @@ b = {
 }
 for (let temp in b) {
     console.log(temp);
+    console.log(b[temp])
+}
+
+for (let temp of a) {
+    console.log(temp);
 }
 
 a = 33

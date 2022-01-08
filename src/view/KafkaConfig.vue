@@ -1,34 +1,40 @@
 <template>
-  <div style="margin-left: 256px">
-    <!--    <button @click="testMockData">添加测试数据</button>-->
-    <button @click="fetchAllKafkaConfigData">获得数据</button>
-    <a-button type="primary">
-      新增kafka配置
-    </a-button>
 
+  <div class="flex-direction-column">
+    <!-- 表格数据 -->
+    <el-table :data="kafkaConfigList" max-height="500px" class="mt-5" stripe border>
+      <el-table-column align="center" prop="kafkaId" label="kafka配置ID" width="150px"></el-table-column>
+      <el-table-column align="center" prop="brokerList" label="	kafka服务器列表" width="150px"></el-table-column>
+      <el-table-column align="center" prop="kafkaAlias" label="kafka别名" width="150px"></el-table-column>
+      <el-table-column align="center" prop="createTime" label="	创建时间" width="150px"></el-table-column>
+      <el-table-column align="center" prop="updateTime" label="	修改时间" width="150px"></el-table-column>
+      <el-table-column label="操作" width="200px" fixed="right">
+        <template slot-scope="{row}">
+          <lambda-button size="mini" icon="el-icon-edit" type="warning" @click="onEditKafkaConfig(row)">修改
+          </lambda-button>
+          <lambda-button
+              size="mini"
+              icon="el-icon-delete"
+              confirm
+              type="danger"
+              @confirm="onDeleteKafkaConfig(row)"
+          >删除
+          </lambda-button>
+        </template>
+      </el-table-column>
+    </el-table>
 
-    <a-table
-        :columns="kafkaConfigColumns"
-        :data-source="kafkaConfigData"
-        :pagination="kafkaConfigPagination"
-        :loading="kafkaConfigLoading"
-        :row-key="record => record.kafkaId"
-        @change="handleKafkaConfigTableChange"
-    >
-
-      <template slot="createTime" slot-scope="createTime"> {{ createTime }}</template>
-      <span slot="action" slot-scope="kafkaConfig">
-        <a-button type="primary" @click="updateKafkaConfig(kafkaConfig)">修改</a-button>
-        <a-divider type="vertical"/>
-        <a-button type="danger" @click="deleteKafkaConfig(kafkaConfig)">删除</a-button>
-        <!--      <a-divider type="vertical" />-->
-        <!--      <a class="ant-dropdown-link"> More actions <a-icon type="down" /> </a>-->
-    </span>
-    </a-table>
+    <!-- 添加按钮 -->
+    <div>
+      <el-button icon="el-icon-plus" type="primary" @click="onAddKafkaConfig" class="mt-5">添 加</el-button>
+    </div>
   </div>
 </template>
 
 <script>
+
+import LambdaButton from "@/components/common/LambdaButton";
+
 // import {useState} from "@/store";
 import {mapState} from "vuex";
 
@@ -72,6 +78,9 @@ let kafkaConfigColumns = [
 
 export default {
   name: "KafkaConfig",
+  components: {
+    LambdaButton
+  },
   computed: {
     ...mapState({
       kafkaConfigList: state => state.kafkaConfigList,
@@ -79,19 +88,14 @@ export default {
     })
   },
   methods: {
-    deleteKafkaConfig(kafkaConfig) {
-      console.log("删除", kafkaConfig);
-    },
-    updateKafkaConfig(kafkaConfig) {
+    onEditKafkaConfig(kafkaConfig) {
       console.log(kafkaConfig);
     },
-    handleKafkaConfigSelect() {
-      console.log("hello, select");
+    onAddKafkaConfig() {
+      // TODO 添加kafkaConfig配置项
     },
-    testMockData() {
-      this.$store.commit({
-        type: "mockKafkaConfigAdd"
-      })
+    onDeleteKafkaConfig(kafkaConfig) {
+      console.log(kafkaConfig);
     },
     fetchAllKafkaConfigData() {
       this.kafkaConfigLoading = true;
@@ -116,29 +120,7 @@ export default {
         });
       }
       this.kafkaConfigColumns[2].filter = filterList;
-    },
-    handleKafkaConfigTableChange(kafkaConfigPagination, filters, sorter) {
-      console.log(kafkaConfigPagination);
-      console.log(filters);
-      console.log(sorter);
-      /**
-       * kafkaConfigPagination: {
-       *   current: 2,
-       *   pageSize: 10,
-       *   total: 200
-       * }
-       *
-       * sorter: {
-       *   columnKey: "name",
-       *   field: "name",
-       *   order: "ascend"
-       * }
-       *
-       * filter: {
-       *   gender: ["male", "female"]
-       * }
-       */
-    },
+    }
   },
   data() {
     return {

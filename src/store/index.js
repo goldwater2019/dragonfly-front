@@ -135,6 +135,9 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         kafkaConfigList: [],
+        kafkaConfigAliasList: [],
+        topicInfoList: [],
+        kafkaSelectedConfig: [],
         num: 0,
         pageKey: 1, // 1: kafkaConfig页面; 2: topic管理页面; 3: starRocks管理页面; 4: schema管理
     },
@@ -160,16 +163,76 @@ export default new Vuex.Store({
                 updateTime: "d"
             });
         },
+        clearKafkaConfig(state) {
+            state.kafkaConfigList = [];
+        },
         changePageKey(state, payload) {
             state.pageKey = payload.pageKey;
+        },
+        clearKafkaConfigAlias(state) {
+            state.kafkaConfigAliasList = [];
+        },
+        addKafkaConfigAlias(state, payload) {
+            state.kafkaConfigAliasList.push(payload.kafkaAlias);
+        },
+        clearTopicInfoList(state) {
+            state.topicInfoList = [];
+        },
+        addTopicInfoList(state, payload) {
+            state.topicInfoList.push({
+                kafkaConfigId: payload.kafkaConfigId,
+                brokerList: payload.brokerList,
+                kafkaAlias: payload.kafkaAlias,
+                topicName: payload.topicName,
+                topicId: payload.topicId
+            });
+        },
+        clearKafkaSelectedConfig(state) {
+            state.kafkaSelectedConfig = [];
+        },
+        addKafkaSelectedConfig(state, payload) {
+            state.kafkaSelectedConfig.push(
+                {
+                    kafkaConfigId: payload.kafkaConfigId,
+                    kafkaAlias: payload.kafkaAlias
+                }
+            );
         }
     },
     actions: {
         async fetchAllKafkaConfigData({commit}) {
-            const promise = await api.getAllKafkaConfig();
-            let data = promise.data;
+            const configPromise = await api.getAllKafkaConfig();
+            const aliasPromise = await api.getAllKafkaConfigAlias();
+            let data = configPromise.data;
+            commit("clearKafkaConfig");
             for (let payload of data) {
                 commit("addKafkaConfig", payload);
+            }
+            data = aliasPromise.data;
+            commit("clearKafkaConfigAlias");
+            for (let payload of data) {
+                commit("addKafkaConfigAlias", payload);
+            }
+        },
+        async queryTopicInfo(context) {
+            let params = [];
+            for (let selectKafkaConfig of context.state.kafkaSelectedConfig) {
+                params.push({
+                    kafkaId: selectKafkaConfig.kafkaConfigId
+                });
+            }
+            const promise = await api.getRichTopicInfo(params);
+            context.commit("clearTopicInfoList");
+            let data = promise.data;
+            for (let topicInfo of data) {
+                context.commit({
+                    type: "addTopicInfoList",
+                    kafkaConfigId: topicInfo.kafkaId,
+                    brokerList: topicInfo.brokerList,
+                    kafkaAlias: topicInfo.kafkaAlias,
+                    topicName: topicInfo.topicName,
+                    topicId: topicInfo.topicId
+                })
             }
         }
     },

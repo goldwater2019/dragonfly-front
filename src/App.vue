@@ -1,24 +1,22 @@
 <template>
   <div id="app">
-    <!--    <img alt="Vue logo" src="./assets/logo.png">-->
-    <nav-bar/>
-    <template v-if="pageKey == 1">
-      <kafka-config/>
-    </template>
-    <!--    <state-test/>-->
+    <div class="flex w-100 left">
+      <nav-bar class="w-20"/>
+      <div>
+        <router-view class="h-100 right flex-align-start nmt-50 ml-10" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import KafkaConfig from "@/components/KafkaConfig";
-import NavBar from "@/components/NavBar";
 import {mapState} from "vuex";
-// import StateTest from "@/components/StateTest";
+
+import NavBar from "@/components/menu/NavBar";
 
 export default {
   name: 'App',
   components: {
-    KafkaConfig,
     NavBar
   },
   computed: {
@@ -37,5 +35,14 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.left {
+  width: 280px;
+  height: 100vh;
+}
+
+.right {
+  height: 100vh;
 }
 </style>
