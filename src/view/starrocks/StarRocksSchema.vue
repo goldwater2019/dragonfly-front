@@ -4,7 +4,7 @@
     <div>
       <el-select v-model="dorisConfigSelectedList"
                  multiple
-                 placeholder="请选择Doris库"
+                 placeholder="请选择StarRocks库"
                  collapse-tags
                  style="margin-left: 20px;"
                  class="w-500"
@@ -40,16 +40,16 @@
       <!-- 表格数据 -->
       <el-table :data="dorisSelectedSchemaList" max-height="500px" class="mt-5" stripe border style="width: 100%">
         <el-table-column align="center" prop="dorisAlias" label="StarRocks名称" width="150px" fixed="left"></el-table-column>
-        <el-table-column align="center" prop="dbName" label="库名" width="150px"></el-table-column>
-        <el-table-column align="center" prop="tableName" label="表名" width="150px"></el-table-column>
-        <el-table-column align="center" prop="fieldName" label="字段名" width="150px"></el-table-column>
-        <el-table-column align="center" prop="nullable" label="是否可空" width="150px"></el-table-column>
+        <el-table-column align="center" prop="dbName" label="库名" width="150px" fixed="left"></el-table-column>
+        <el-table-column align="center" prop="tableName" label="表名" width="150px" fixed="left"></el-table-column>
+        <el-table-column align="center" prop="fieldName" label="字段名" width="150px" fixed="left"></el-table-column>
+        <el-table-column align="center" prop="literalNullable" label="是否可空" width="150px"></el-table-column>
         <el-table-column align="center" prop="typeName" label="	字段类型" width="150px"></el-table-column>
         <el-table-column align="center" prop="columnSize" label="字段大小" width="150px"></el-table-column>
         <el-table-column align="center" prop="decimalDigits" label="小数位数" width="150px"></el-table-column>
         <el-table-column align="center" prop="remarks" label="字段描述" width="150px"></el-table-column>
-        <el-table-column align="center" prop="dorisSchemaId" label="dorisSchemaId" width="150px"></el-table-column>
-        <el-table-column align="center" prop="dorisId" label="dorisId" width="150px" fixed="right"></el-table-column>
+<!--        <el-table-column align="center" prop="dorisSchemaId" label="dorisSchemaId" width="150px"></el-table-column>-->
+<!--        <el-table-column align="center" prop="dorisId" label="dorisId" width="150px" fixed="right"></el-table-column>-->
       </el-table>
     </div>
   </div>
@@ -106,6 +106,7 @@ export default {
                 tableName: dorisSchema.tableName,
                 typeName: dorisSchema.typeName,
                 updateTime: dorisSchema.updateTime,
+                literalNullable: dorisSchema.nullable === 1 ? 'TRUE' : 'FALSE',
                 dorisAlias: dorisAlias
               });
             }

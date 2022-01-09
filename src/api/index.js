@@ -44,6 +44,18 @@ const api = {
     },
     addKafkaTopic(params) {
         return request.post('/kafkaConfig/topic/create/v2', params);
+    },
+    deleteStarRockConfig(params) {
+        return request.post('/dorisConfig/doris/config/delete', params);
+    },
+    pingStarRocksConfig(params) {
+        return request.post('/dorisConfig/doris/ping', params);
+    },
+    addStarRocksConfig(params) {
+        return request.post('/dorisConfig/doris/config/insert', params);
+    },
+    updateStarRocksConfig(params) {
+        return request.post('/dorisConfig/doris/config/update', params);
     }
 }
 
