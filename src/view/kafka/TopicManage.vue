@@ -17,7 +17,43 @@
         </el-option>
       </el-select>
       <el-button icon="el-icon" type="primary" class="mt-5" @click="onQueryData">查询</el-button>
-      <el-button icon="el-icon" type="primary" class="mt-5" @click="onQueryData">新增</el-button>
+      <el-button icon="el-icon" type="primary" class="mt-5" @click="onAddTopicInfo">新增</el-button>
+      <el-dialog
+          title="新增topic"
+          :visible.sync="dialogVisible"
+          width="30%"
+          :before-close="handleClose">
+        <!-- dialog的数据 -->
+        <el-form :model="addKafkaTopicData">
+          <el-form-item label="kafka名称" :label-width="formLabelWidth">
+            <el-select v-model="addKafkaTopicData.kafkaAlias" autocomplete="off">
+              <el-option v-for="kafkaConfigAliasData in kafkaConfigAliasListData"
+                         :key="kafkaConfigAliasData.kafkaId"
+                         :label="kafkaConfigAliasData.kafkaAlias"
+                         :value="kafkaConfigAliasData.kafkaAlias"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="topic名称" :label-width="formLabelWidth">
+            <el-input v-model="addKafkaTopicData.topicName" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="分区数量" :label-width="formLabelWidth">
+            <el-input v-model="addKafkaTopicData.partitionNum" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="副本因子" :label-width="formLabelWidth">
+            <el-input v-model="addKafkaTopicData.replicationFactor" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <!-- 内部弹窗 -->
+        <el-dialog title="错误信息" :visible.sync="innerDialogVisible">
+          {{ innerMessage }}
+        </el-dialog>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="onAddTopicInfoConfirm">确 定</el-button>
+        </span>
+      </el-dialog>
     </div>
     <div>
       <!-- 表格数据 -->
@@ -56,9 +92,19 @@ export default {
   },
   data() {
     return {
-      kafkaConfigAliasSelectedList: [],
+      kafkaConfigAliasSelectedList: [],  // 选中的kafkaConfigId
       kafkaConfigList: this.$store.state.kafkaConfigList,
-      topicInfoList: []
+      topicInfoList: [],
+      formLabelWidth: '120px',
+      dialogVisible: false,  // 新增对话框是否可见
+      addKafkaTopicData: {
+        kafkaAlias: "",
+        topicName: "topicNameDev",
+        partitionNum: 1,
+        replicationFactor: 1
+      },
+      innerDialogVisible: false, // 错误信息弹窗不可见,
+      innerMessage: "",
     }
   },
   computed: {
@@ -74,6 +120,54 @@ export default {
     },
   },
   methods: {
+    onAddTopicInfoConfirm() {
+      let addKafkaTopicData = this.addKafkaTopicData;
+      for (let kafkaAliasData of this.kafkaConfigAliasListData) {
+        if (kafkaAliasData.kafkaAlias === addKafkaTopicData.kafkaAlias) {
+          addKafkaTopicData.kafkaId = kafkaAliasData.kafkaId;
+        }
+      }
+      let params = {
+        kafkaId: addKafkaTopicData.kafkaId,
+        partitionNum: addKafkaTopicData.partitionNum,
+        replicationFactor: addKafkaTopicData.replicationFactor,
+        topicName: addKafkaTopicData.topicName
+      };
+      api.addKafkaTopic(params)
+          .then(res => {
+            let code = res.code;
+            if (code === 0) {
+              // 添加成功
+              this.dialogVisible = false;
+              this.onQueryData();
+              this.addKafkaTopicData = {
+                kafkaAlias: "",
+                topicName: "topicNameDev",
+                partitionNum: 1,
+                replicationFactor: 1
+              };
+            } else {
+              // 添加失败
+              this.dialogVisible = true;
+              // 显示错误信息窗口
+              this.innerDialogVisible = true;
+              this.innerMessage = res.msg;
+            }
+          })
+          .catch(() => {
+          });
+    },
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+          .then(() => {
+            done();
+          })
+          .catch(() => {
+          });
+    },
+    onAddTopicInfo() {
+      this.dialogVisible = true;
+    },
     arraySpanMethod() {
       /**
        * { row, column, rowIndex, columnIndex }
