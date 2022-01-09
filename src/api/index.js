@@ -56,7 +56,14 @@ const api = {
     },
     updateStarRocksConfig(params) {
         return request.post('/dorisConfig/doris/config/update', params);
-    }
+    },
+    getStarRocksTableNameList(params) {
+        return request.post('/dorisSchema/doris/table/name/list', params);
+    },
+    // kafka2sr schema生成
+    generateK2DSchema(params) {
+        return request.post('/k2dSchemaMapping/generate', params);
+    },
 }
 
 export default api;

@@ -39,13 +39,13 @@ export const menu = [
         children: [
             {
                 id: '3.1',
-                name: 'shema配置',
-                path: 'kafka2starRocksSchemaConfig'
+                name: 'shema生成器',
+                path: 'kafka2starRocksSchemaGenerator'
             },
             {
                 id: '3.2',
-                name: 'schema查看',
-                path: 'kafka2starRocksSchemaShow'
+                name: 'schema配置',
+                path: 'kafka2starRocksSchemaConfig'
             }
         ]
     }

@@ -1,14 +1,20 @@
 <template>
+<div>
+  <h2>
+    kafka2starRocksSchemaShow
+  </h2>
   <div>
-    <h2>
-      kafka2starRocksSchemaConfig
-    </h2>
+    一键生成schema
   </div>
+  <div>
+    表格数据, 包含新增和修改
+  </div>
+</div>
 </template>
 
 <script>
 export default {
-  name: "Kafka2starRocksSchemaConfig"
+  name: "Kafka2starRocksSchemaShow"
 }
 </script>
 

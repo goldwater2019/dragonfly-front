@@ -30,13 +30,13 @@ const routes = [
         name: 'starRocksSchema',
         component: () => import('@/view/starrocks/StarRocksSchema')
     }, {
+        path: '/kafka2starRocksSchemaGenerator',
+        name: 'kafka2starRocksSchemaGenerator',
+        component: () => import('@/view/kafka2starrocks/Kafka2starRocksSchemaGenerator')
+    }, {
         path: '/kafka2starRocksSchemaConfig',
         name: 'kafka2starRocksSchemaConfig',
         component: () => import('@/view/kafka2starrocks/Kafka2starRocksSchemaConfig')
-    }, {
-        path: '/kafka2starRocksSchemaShow',
-        name: 'kafka2starRocksSchemaShow',
-        component: () => import('@/view/kafka2starrocks/Kafka2starRocksSchemaShow')
     }, {
         path: '/kafkaConfig/edit/:kafkaId',
         name: 'kafkaConfigEdit',
