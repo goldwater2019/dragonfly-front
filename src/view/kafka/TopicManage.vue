@@ -21,7 +21,7 @@
     </div>
     <div>
       <!-- 表格数据 -->
-      <el-table :data="topicInfoList" max-height="500px" class="mt-5" stripe border>
+      <el-table :data="topicInfoList" max-height="500px" class="mt-5" :span-method="arraySpanMethod" stripe border>
         <el-table-column align="center" prop="topicId" label="topicId" width="150px"></el-table-column>
         <el-table-column align="center" prop="topicName" label="	topic名称" width="150px"></el-table-column>
         <el-table-column align="center" prop="kafkaConfigId" label="	kafkaId" width="150px"></el-table-column>
@@ -74,6 +74,19 @@ export default {
     },
   },
   methods: {
+    arraySpanMethod() {
+      /**
+       * { row, column, rowIndex, columnIndex }
+       */
+      // if (rowIndex % 2 === 0) {
+      //   if (columnIndex === 0) {
+      //     return [1, 2];
+      //   } else if (columnIndex === 1) {
+      //     return [0, 0];
+      //   }
+      // }
+      // console.log(content);
+    },
     onDeleteKafkaTopic(topicInfo) {
       let kafkaId = topicInfo.kafkaConfigId;
       let topicName = topicInfo.topicName;

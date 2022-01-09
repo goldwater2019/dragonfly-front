@@ -37,6 +37,18 @@ const api = {
     },
     getAndRefreshDorisSchemaList(params) {
         return request.post('/dorisConfig/schema/get/refresh/list', params);
+    },
+    testKafkaConnection(params) {
+        return request.post('/kafkaConfig/kafka/connection/test', params);
+    },
+    updateKafkaConfig(params) {
+        return request.post('/kafkaConfig/kafka/config/update', params);
+    },
+    addKafkaConfig(params) {
+        return request.post('/kafkaConfig/kafka/config/add', params);
+    },
+    deleteKafkaConfig(params) {
+        return request.post('/kafkaConfig/kafka/config/delete', params);
     }
 }
 

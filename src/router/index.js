@@ -16,27 +16,31 @@ const routes = [
     }, {
         path: '/kafkaConfig',
         name: 'kafkaConfig',
-        component: () => import('@/view/KafkaConfig')
+        component: () => import('@/view/kafka/KafkaConfig')
     }, {
         path: '/topicManage',
         name: 'topicManage',
-        component: () => import('@/view/TopicManage')
+        component: () => import('@/view/kafka/TopicManage')
     }, {
         path: '/starRocksConfig',
         name: 'starRocksConfig',
-        component: () => import('@/view/StarRocksConfig')
+        component: () => import('@/view/starrocks/StarRocksConfig')
     }, {
         path: '/starRocksSchema',
         name: 'starRocksSchema',
-        component: () => import('@/view/StarRocksSchema')
+        component: () => import('@/view/starrocks/StarRocksSchema')
     }, {
         path: '/kafka2starRocksSchemaConfig',
         name: 'kafka2starRocksSchemaConfig',
-        component: () => import('@/view/Kafka2starRocksSchemaConfig')
+        component: () => import('@/view/kafka2starrocks/Kafka2starRocksSchemaConfig')
     }, {
         path: '/kafka2starRocksSchemaShow',
         name: 'kafka2starRocksSchemaShow',
-        component: () => import('@/view/Kafka2starRocksSchemaShow')
+        component: () => import('@/view/kafka2starrocks/Kafka2starRocksSchemaShow')
+    }, {
+        path: '/kafkaConfig/edit/:kafkaId',
+        name: 'kafkaConfigEdit',
+        component: () => import('@/view/kafka/KafkaEdit')
     }
 ]
 
